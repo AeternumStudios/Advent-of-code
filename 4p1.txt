@@ -1,0 +1,32 @@
+public class Part1 {
+
+    private static int valid = 0;
+    public static void main(String[] args) {
+        try (Stream<String> stream = Files.lines(Paths.get("E:\\AdventOfCode\\Day 4\\input.txt"))) {
+            stream.forEach(string -> {
+                if (isValid(string)) {
+                    valid++;
+                    System.out.println("Valid: " + string);
+                } else {
+                    System.out.println("Invalid: " + string);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Result:\n   " + valid);
+    }
+
+    private static boolean isValid(String word) {
+        List<String> parts = new ArrayList<>();
+        for (String part : word.split(" ")) {
+            if (!parts.contains(part)) {
+                parts.add(part);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+}

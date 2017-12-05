@@ -1,0 +1,52 @@
+public class Part2 {
+
+    private static int valid = 0;
+    public static void main(String[] args) {
+        try (Stream<String> stream = Files.lines(Paths.get("E:\\AdventOfCode\\Day 4\\input.txt"))) {
+            stream.forEach(string -> {
+                if (isValid(string)) {
+                    valid++;
+                    System.out.println("Valid: " + string);
+                } else {
+                    System.out.println("Invalid: " + string);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Result:\n   " + valid);
+    }
+
+    private static boolean isValid(String word) {
+        List<String> parts = new ArrayList<>();
+        for (String part : word.split(" ")) {
+            if (!containsAnagram(part, parts)) {
+                parts.add(part);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean containsAnagram(String checkingWord, List<String> words) {
+        for (String word : words) {
+            if (isAnagram(checkingWord, word)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isAnagram(String one, String two) {
+        List<Character> chars1 = new ArrayList<>();
+        List<Character> chars2 = new ArrayList<>();
+
+        Arrays.stream(one.split("")).forEachOrdered(pcha -> chars1.add(pcha.charAt(0)));
+        Arrays.stream(two.split("")).forEachOrdered(pcha -> chars2.add(pcha.charAt(0)));
+
+        return chars1.containsAll(chars2) && chars2.containsAll(chars1);
+    }
+
+}
