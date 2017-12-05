@@ -1,0 +1,58 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+)
+
+func makeJumpsList(filepath string) ([]int, error) {
+	f, err := os.Open(filepath)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	jumps := []int{}
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		s := scanner.Text()
+		if s == "" {
+			continue
+		}
+		i, err := strconv.Atoi(s)
+		if err != nil {
+			return nil, err
+		}
+		jumps = append(jumps, i)
+	}
+	return jumps, nil
+}
+
+func main() {
+	jumps, err := makeJumpsList("input")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var (
+		count  = 0
+		end    = len(jumps) - 1
+		i      = 0
+		offset = 0
+	)
+	for i <= end {
+		offset = jumps[i]
+		if offset >= 3 {
+			jumps[i]--
+		} else {
+			jumps[i]++
+		}
+		i += offset
+		count++
+	}
+
+	fmt.Println(count)
+}
